@@ -141,6 +141,13 @@ hr.sep{border:0;border-top:1px solid var(--line);margin:20px 0}
   .totals{gap:10px}
   .totals strong{font-size:15px}
 }
+
+.addon-section-head{margin:8px 0 14px;padding-top:6px}
+.addon-section-head h2{font-size:30px;margin:4px 0 6px}
+.addon-section-head p{color:var(--muted);margin:0 0 14px}
+.exterior-head{margin-top:38px;padding-top:28px;border-top:1px solid var(--line)}
+.addon-section-grid{margin-top:0}
+
 </style>
 </head>
 <body>
@@ -155,7 +162,7 @@ hr.sep{border:0;border-top:1px solid var(--line);margin:20px 0}
 <section class="step active" data-step="1">
   <div class="kicker">Step 1 of 7</div>
   <h1>What are we detailing?</h1>
-  <p class="lead">Choose your vehicle type. This controls the service options, pricing, and estimated appointment time.</p>
+  <p class="lead">Choose the vehicle that best matches what you drive. Sedan and Two-Row SUV / Crossover share one pricing tier; Truck and Three-Row SUV share the larger-vehicle pricing tier.</p>
   <div class="grid" id="vehicleGrid"></div>
   <div class="actions"><button class="btn primary" id="vehicleNext" disabled>Continue →</button></div>
 </section>
@@ -267,8 +274,10 @@ const state={
 };
 
 const vehicles={
-  standard:{name:'Sedan / 2-Row SUV',icon:'🚗',desc:'Cars, crossovers, and SUVs with up to two seating rows.'},
-  large:{name:'Truck / 3-Row SUV',icon:'🛻',desc:'Pickup trucks and SUVs with a third seating row.'},
+  sedan:{name:'Sedan',icon:'🚗',desc:'Traditional passenger cars and compact sedans.',pricingGroup:'standard'},
+  tworow:{name:'Two-Row SUV / Crossover',icon:'🚙',desc:'Crossovers and SUVs with up to two seating rows.',pricingGroup:'standard'},
+  truck:{name:'Truck',icon:'🛻',desc:'Pickup trucks of all standard sizes.',pricingGroup:'large'},
+  threerow:{name:'Three-Row SUV',icon:'🚘',desc:'SUVs with a third seating row.',pricingGroup:'large'},
   motorcycle:{name:'Motorcycle',icon:'🏍️',desc:'Motorcycle detailing.'},
   utv:{name:'UTV / Side-by-Side',icon:'🏁',desc:'Side-by-side and off-road vehicle detailing.'},
   boat:{name:'Boat',icon:'🚤',desc:'Boat detailing priced by linear foot.'},
@@ -331,22 +340,25 @@ function timeText(m){
   const h=Math.floor(m/60),r=Math.round(m%60);
   return h?(r?`${h} hr ${r} min`:`${h} hr`):`${r} min`
 }
+function pricingGroup(){
+  return vehicles[state.vehicle]?.pricingGroup || state.vehicle;
+}
 function currentPackage(){
   if(!state.vehicle||!state.serviceType) return null;
-  const arr=packages[state.vehicle]?.[state.serviceType]||[];
+  const arr=packages[pricingGroup()]?.[state.serviceType]||[];
   return arr.find(x=>x.id===state.pkg)||null
 }
 function addonPrice(a,val){
   const q=typeof val==='number'?val:1;
   if(a.quote)return 0;
-  if(a.vehiclePrice)return a.vehiclePrice[state.vehicle]||0;
+  if(a.vehiclePrice)return a.vehiclePrice[pricingGroup()]||0;
   if(a.perUnit)return a.perUnit*q;
   return a.price||0
 }
 function addonMins(a,val){
   const q=typeof val==='number'?val:1;
   if(a.quote)return 0;
-  if(a.vehicleMins)return a.vehicleMins[state.vehicle]||0;
+  if(a.vehicleMins)return a.vehicleMins[pricingGroup()]||0;
   if(a.minsPerUnit)return a.minsPerUnit*q;
   return a.mins||0
 }
@@ -390,7 +402,7 @@ function renderServiceTypes(){
   const g=document.getElementById('serviceTypeGrid');g.innerHTML='';
   const v=state.vehicle;
   let opts=[];
-  if(v==='standard'||v==='large'){
+  if(['sedan','tworow','truck','threerow'].includes(v)){
     opts=[
       {id:'interior',name:'Interior',desc:'Choose Mini Interior or Full Interior.'},
       {id:'exterior',name:'Exterior',desc:'Choose Mini Exterior or Full Exterior.'},
@@ -434,7 +446,7 @@ function specialPackages(){
 function renderPackages(){
   const g=document.getElementById('packageGrid');g.innerHTML='';
   document.getElementById('packageLead').textContent=`Showing ${state.serviceType} options for ${vehicles[state.vehicle].name}.`;
-  const arr=(packages[state.vehicle]?.[state.serviceType])||specialPackages();
+  const arr=(packages[pricingGroup()]?.[state.serviceType])||specialPackages();
   arr.forEach(p=>{
     const c=document.createElement('div');c.className='card choice'+(state.pkg===p.id?' selected':'');
     c.innerHTML=`<h2>${p.name}</h2><div class="meta">${p.price?`<span class="pill blue">${money(p.price)}</span>`:'<span class="pill blue">Calculated by size</span>'}${p.mins?`<span class="pill">${timeText(p.mins)}</span>`:'<span class="pill">Time based on size</span>'}</div><p>${p.desc}</p><ul class="list">${(p.items||[]).map(i=>`<li>${i}</li>`).join('')}</ul>${p.note?`<div class="note">${p.note}</div>`:''}${p.special?`<div class="note">${p.special}</div>`:''}`;
@@ -444,7 +456,7 @@ function renderPackages(){
   document.getElementById('packageNext').disabled=!state.pkg;
 }
 function relevantAddons(){
-  if(!(state.vehicle==='standard'||state.vehicle==='large'))return [];
+  if(!['sedan','tworow','truck','threerow'].includes(state.vehicle))return [];
   let cats=[];
   if(state.serviceType==='interior')cats=['interior'];
   if(state.serviceType==='exterior')cats=['exterior','quote'];
@@ -454,6 +466,22 @@ function relevantAddons(){
     return true;
   })
 }
+function buildAddonCard(a){
+  const val=state.addons[a.id]||0;
+  const selected=!!val;
+  const priceLabel=a.quote?'Request estimate':a.vehiclePrice?money(a.vehiclePrice[pricingGroup()]):a.perUnit?`${money(a.perUnit)} / ${a.unit}`:money(a.price);
+  const timeLabel=a.quote?a.minsLabel:a.vehicleMins?timeText(a.vehicleMins[pricingGroup()]):a.minsPerUnit?`${a.minsPerUnit} min / ${a.unit}`:timeText(a.mins);
+  const c=document.createElement('div');
+  c.className='card addon-card'+(selected?' selected':'');
+  c.innerHTML=`<div class="addon-top"><div><h3>${a.name}</h3><div class="meta"><span class="pill blue">${priceLabel}</span><span class="pill">${timeLabel}</span></div><p>${a.desc}</p></div>${a.perUnit?'':`<div class="add-toggle" aria-label="Select add-on"></div>`}</div>${a.perUnit?`<div class="qtyrow"><label style="margin:0">Quantity</label><input type="number" min="0" max="12" value="${val||0}" inputmode="numeric"></div>`:''}`;
+  if(a.perUnit){
+    const inp=c.querySelector('input');
+    inp.oninput=()=>{const q=Math.max(0,Number(inp.value||0));state.addons[a.id]=q||false;c.classList.toggle('selected',q>0);updateSummary()}
+  }else{
+    c.onclick=(e)=>{if(e.target.closest('input'))return;state.addons[a.id]=!state.addons[a.id];renderAddons();updateSummary()}
+  }
+  return c;
+}
 function renderAddons(){
   const g=document.getElementById('addonGrid');g.innerHTML='';
   const note=document.getElementById('addonNote');
@@ -461,29 +489,23 @@ function renderAddons(){
   if(!rel.length){
     note.classList.remove('hidden');
     note.textContent='No additional add-ons are configured for this vehicle category in the prototype. You can continue to the calendar.';
-    g.innerHTML='';
+    g.className='grid';
     return;
   }
   note.classList.add('hidden');
-  rel.forEach(a=>{
-    const val=state.addons[a.id]||0;
-    const selected=!!val;
-    const priceLabel=a.quote?'Request estimate':a.vehiclePrice?money(a.vehiclePrice[state.vehicle]):a.perUnit?`${money(a.perUnit)} / ${a.unit}`:money(a.price);
-    const timeLabel=a.quote?a.minsLabel:a.vehicleMins?timeText(a.vehicleMins[state.vehicle]):a.minsPerUnit?`${a.minsPerUnit} min / ${a.unit}`:timeText(a.mins);
-    const c=document.createElement('div');c.className='card addon-card'+(selected?' selected':'');
-    c.innerHTML=`<div class="addon-top"><div><h3>${a.name}</h3><div class="meta"><span class="pill blue">${priceLabel}</span><span class="pill">${timeLabel}</span></div><p>${a.desc}</p></div>${a.perUnit?'':`<div class="add-toggle" aria-label="Select add-on"></div>`}</div>${a.perUnit?`<div class="qtyrow"><label style="margin:0">Quantity</label><input type="number" min="0" max="12" value="${val||0}" inputmode="numeric"></div>`:''}`;
-    if(a.perUnit){
-      const inp=c.querySelector('input');
-      inp.oninput=()=>{const q=Math.max(0,Number(inp.value||0));state.addons[a.id]=q||false;c.classList.toggle('selected',q>0);updateSummary()}
-    }else{
-      c.onclick=(e)=>{
-        if(e.target.closest('input'))return;
-        state.addons[a.id]=!state.addons[a.id];
-        renderAddons();updateSummary()
-      }
-    }
-    g.appendChild(c)
-  })
+  if(state.serviceType==='both'){
+    g.className='';
+    const interior=rel.filter(a=>a.cat==='interior');
+    const exterior=rel.filter(a=>a.cat==='exterior'||a.cat==='quote');
+    const iw=document.createElement('div');
+    iw.innerHTML=`<div class="addon-section-head"><div class="kicker">Interior Add-ons</div><h2>Interior Add-ons</h2><p>Choose any interior upgrades you want to add to your package.</p></div><div class="grid addon-section-grid"></div>`;
+    const ig=iw.querySelector('.addon-section-grid'); interior.forEach(a=>ig.appendChild(buildAddonCard(a))); g.appendChild(iw);
+    const ew=document.createElement('div');
+    ew.innerHTML=`<div class="addon-section-head exterior-head"><div class="kicker">Exterior Add-ons</div><h2>Exterior Add-ons</h2><p>Choose any exterior upgrades or estimate-based protection services.</p></div><div class="grid addon-section-grid"></div>`;
+    const eg=ew.querySelector('.addon-section-grid'); exterior.forEach(a=>eg.appendChild(buildAddonCard(a))); g.appendChild(ew);
+  }else{
+    g.className='grid'; rel.forEach(a=>g.appendChild(buildAddonCard(a)));
+  }
 }
 function renderCalendar(){
   const g=document.getElementById('calendarDays');g.innerHTML='';
