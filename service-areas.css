@@ -1,0 +1,48 @@
+/* Additive styles: shared area links and city pages only. */
+.areas-section .area-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.area-link{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:88px;padding:22px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(140deg,rgba(18,173,255,.07),var(--panel));font-weight:800;transition:border-color .2s,background .2s}
+.area-link>span:last-child{color:var(--blue);font-size:23px}
+.area-link:hover{border-color:var(--blue);background:var(--panel-2)}
+.areas-note{max-width:800px;color:var(--muted);line-height:1.7;margin-top:24px}
+.areas-note a{color:var(--blue-soft);white-space:nowrap}
+.areas-section{scroll-margin-top:90px}
+.city-page .city-hero{min-height:auto;padding-top:80px;padding-bottom:70px;gap:44px;grid-template-columns:1.15fr .85fr}
+.city-page .hero h1{font-size:clamp(38px,5.3vw,68px);line-height:1.05;letter-spacing:-.045em}
+.city-page .hero h1 span{display:block}
+.city-page .breadcrumb{color:var(--blue-soft);font-size:13px;display:inline-block;margin-bottom:12px}
+.city-page .section{padding-top:65px;padding-bottom:65px}
+.city-page .city-local{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.city-local>p{max-width:860px;color:#b5c2cc;font-size:18px;line-height:1.8}
+.city-page .section-heading h2,.city-page .about-card h2,.city-page .final-cta h2{font-size:clamp(30px,4vw,46px);line-height:1.12}
+.city-page .city-services .service-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.city-page .service-card{display:flex;flex-direction:column;min-height:0}
+.city-page .service-card h3{font-size:25px}
+.city-page .service-card a{position:static;display:block;margin-top:auto;padding-top:12px}
+.city-page .service-card p{margin-bottom:20px}
+.city-page .area-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.city-page .local-resource{display:inline-block;margin-top:12px;color:var(--blue-soft);text-decoration:underline;text-underline-offset:4px;font-size:13px}
+.city-page .city-trust{padding-top:30px;padding-bottom:30px}
+.city-page .about-points,.city-page .about-card,.city-page .hero-content,.city-page .detail-card{min-width:0}
+.city-page summary{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.city-page summary::after{content:'+';color:var(--blue);font-size:24px}
+.city-page details[open] summary::after{content:'−'}
+.city-page a:focus-visible,.city-page button:focus-visible,.city-page summary:focus-visible,.areas-section a:focus-visible{outline:3px solid var(--blue-soft);outline-offset:5px}
+.city-page .compare:focus-within{outline:3px solid var(--blue-soft);outline-offset:-3px}
+.skip-link{position:fixed;left:16px;top:-100px;z-index:100;background:var(--blue);color:var(--bg);padding:14px;border-radius:8px;font-weight:800}
+.skip-link:focus{top:12px}
+.city-page #main{scroll-margin-top:90px}
+@media(max-width:1050px){.city-page .nav{gap:16px}}
+@media(max-width:900px){
+  .areas-section .area-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .city-page .city-hero{grid-template-columns:1fr;gap:30px;padding-top:48px}
+  .city-page .city-services .service-grid{grid-template-columns:1fr}
+}
+@media(max-width:580px){
+  .area-link{padding:17px;min-height:82px;font-size:14px}
+  .city-page .section{padding-top:48px;padding-bottom:48px}
+  .city-page .area-grid{grid-template-columns:1fr}
+  .city-page .about-card,.city-page .about-points{padding:26px}
+  .city-page .detail-card h2{font-size:29px}
+  .city-local>p{font-size:16px}
+}
+@media(prefers-reduced-motion:reduce){.city-page{scroll-behavior:auto}.area-link{transition:none}}
