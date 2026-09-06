@@ -107,6 +107,13 @@ function updateSummary(){
 function renderProgress(){
   const p=document.getElementById('progress');p.innerHTML='';
   for(let i=1;i<=7;i++){const s=document.createElement('span');if(i<=state.step)s.className='on';p.appendChild(s)}
+  document.querySelectorAll('.progress-step').forEach((el,index)=>{
+    const step=index+1;
+    el.classList.toggle('active',step===state.step);
+    el.classList.toggle('done',step<state.step);
+    if(step===state.step) el.setAttribute('aria-current','step');
+    else el.removeAttribute('aria-current');
+  });
 }
 function go(step){
   state.step=step;
