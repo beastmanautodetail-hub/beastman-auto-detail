@@ -98,6 +98,16 @@
       <div><label>Preferred contact</label><select id="contact"><option>Text message</option><option>Phone call</option><option>Email</option></select></div>
     </div>
     <div style="margin-top:14px"><label>Anything we should know?</label><textarea id="notes" rows="4" placeholder="Vehicle condition, gate code, parking instructions, pet hair, stains, special concerns..."></textarea></div>
+    <div class="follow-up-consent">
+      <label class="inspection-check">
+        <input type="checkbox" id="followUpConsent">
+        <span>
+          <strong>You may contact me about this booking if I leave before finishing.</strong>
+          <small>Optional. We will only use the email address or phone number you provide above for this booking follow-up. No follow-up messages are sent by this website today.</small>
+        </span>
+      </label>
+      <p class="privacy-note">Your unfinished booking is saved only in this browser for up to 30 days so you can continue later. We do not store contact details in cookies.</p>
+    </div>
     <div id="formError" class="error"></div>
   </div>
   <div class="actions"><button class="btn secondary" data-back>← Back</button><button class="btn primary" id="customerNext">Review booking →</button></div>
@@ -151,6 +161,6 @@
 
 
 
-  <script src="booking.js"></script>
+  <script src="booking.js?v=20260906b"></script>
 </body>
 </html>

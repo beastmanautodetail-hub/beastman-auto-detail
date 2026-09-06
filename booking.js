@@ -1,5 +1,5 @@
 const state={
-  step:1,maxStep:1,vehicle:null,serviceType:null,pkg:null,addons:{},date:null,time:null,customer:{}
+  step:1,maxStep:1,vehicle:null,serviceType:null,pkg:null,addons:{},date:null,time:null,customer:{},followUpConsent:false
 };
 
 const vehicles={
@@ -25,6 +25,8 @@ const packages={
     ],
     both:[
       {id:'mini-bundle',name:'Mini Interior + Exterior',price:160,mins:120,desc:'Complete light interior and exterior refresh in one appointment.',items:['MINI EXTERIOR: wheel/tire cleaning + tire shine, bug removal, snow foam hand wash, exterior windows','MINI INTERIOR: light vacuum, interior windows, hard-surface wipe-down, light seat/leather cleaning, light door-jamb wipe-down','$30 bundle savings'],note:'Mini details are intended for vehicles in generally good condition requiring only light cleaning.'},
+      {id:'mini-exterior-full-interior',name:'Mini Exterior + Full Interior',price:280,mins:180,desc:'Pair a light exterior refresh with a comprehensive interior detail.',items:['MINI EXTERIOR: wheel/tire cleaning + tire shine, bug removal, snow foam hand wash, exterior windows','FULL INTERIOR: full vacuum, steam cleaning, scrubbed hard surfaces, seat/leather cleaning, floor mats, crevices, door jambs, interior windows','$40 bundle savings']},
+      {id:'full-exterior-mini-interior',name:'Full Exterior + Mini Interior',price:205,mins:180,desc:'Pair a deeper protected exterior detail with a light interior reset.',items:['FULL EXTERIOR: wheel/tire cleaning + dressing, wheel wells, bug/tar removal, snow foam hand wash, exterior windows, 3-month sealant, UV dressing','MINI INTERIOR: light vacuum, interior windows, hard-surface wipe-down, light seat/leather cleaning, light door-jamb wipe-down','$40 bundle savings'],note:'Mini details are intended for vehicles in generally good condition requiring only light cleaning.'},
       {id:'full-bundle',name:'Full Interior + Exterior',price:325,mins:240,desc:'Complete interior and exterior detail with added exterior protection.',items:['FULL EXTERIOR: wheel/tire cleaning + dressing, wheel wells, bug/tar removal, snow foam hand wash, exterior windows, 3-month sealant, UV dressing','FULL INTERIOR: full vacuum, steam cleaning, scrubbed hard surfaces, seat/leather cleaning, floor mats, crevices, door jambs, interior windows','$50 bundle savings']}
     ]
   },
@@ -39,6 +41,8 @@ const packages={
     ],
     both:[
       {id:'mini-bundle',name:'Mini Interior + Exterior',price:160,mins:120,desc:'Complete light interior and exterior refresh in one appointment.',items:['MINI EXTERIOR: wheel/tire cleaning + tire shine, bug removal, snow foam hand wash, exterior windows','MINI INTERIOR: light vacuum, interior windows, hard-surface wipe-down, light seat/leather cleaning, light door-jamb wipe-down','$30 bundle savings']},
+      {id:'mini-exterior-full-interior',name:'Mini Exterior + Full Interior',price:330,mins:240,desc:'Pair a light exterior refresh with a comprehensive interior detail for a larger cabin.',items:['MINI EXTERIOR: wheel/tire cleaning + tire shine, bug removal, snow foam hand wash, exterior windows','FULL INTERIOR: full vacuum, steam cleaning, scrubbed hard surfaces, seat/leather cleaning, floor mats, crevices, door jambs, interior windows','$40 bundle savings']},
+      {id:'full-exterior-mini-interior',name:'Full Exterior + Mini Interior',price:230,mins:180,desc:'Pair a deeper protected exterior detail with a light interior reset.',items:['FULL EXTERIOR: wheel/tire cleaning + dressing, wheel wells, bug/tar removal, snow foam hand wash, exterior windows, 3-month sealant, UV dressing','MINI INTERIOR: light vacuum, interior windows, hard-surface wipe-down, light seat/leather cleaning, light door-jamb wipe-down','$40 bundle savings']},
       {id:'full-bundle',name:'Full Interior + Exterior',price:400,mins:300,desc:'Complete interior and exterior detail for a truck or three-row SUV.',items:['FULL EXTERIOR: wheel/tire cleaning + dressing, wheel wells, bug/tar removal, snow foam hand wash, exterior windows, 3-month sealant, UV dressing','FULL INTERIOR: full vacuum, steam cleaning, scrubbed hard surfaces, seat/leather cleaning, floor mats, crevices, door jambs, interior windows','$50 bundle savings']}
     ]
   }
@@ -51,7 +55,8 @@ const addons=[
   {id:'wheelwell',cat:'exterior',name:'Wheel Well Cleaning',price:40,mins:30,desc:'Removes built-up mud, road grime, salt, and debris from wheel wells for a cleaner, more finished appearance.'},
   {id:'enhance',cat:'exterior',name:'Paint Enhancement',vehiclePrice:{standard:190,large:285},vehicleMins:{standard:150,large:210},desc:'A light polishing service designed to improve gloss and overall appearance. Helps reduce the look of minor swirl marks, light scratches, and dullness.'},
   {id:'correction',cat:'quote',name:'Paint Correction',quote:true,minsLabel:'Approx. 8–10 hours',desc:'Machine polishing used to remove or significantly reduce deeper swirl marks, scratches, oxidation, and other paint imperfections. Final price depends on paint condition.'},
-  {id:'ceramic',cat:'quote',name:'Ceramic Coating',quote:true,minsLabel:'Duration TBD',desc:'A long-lasting protective layer that bonds to your paint and helps repel water, dirt, road grime, UV rays, and light chemical contaminants.'},
+  {id:'ceramic-3-year',cat:'quote',name:'3-Year Ceramic Coating + 1-Step Paint Correction',quote:true,minsLabel:'Timing confirmed with estimate',desc:'Our more affordable ceramic option. Includes a 1-step paint correction followed by a 3-year ceramic coating. Vehicle condition determines the final estimate and timing.'},
+  {id:'ceramic-5-year',cat:'quote',name:'5-Year Ceramic Coating + 2-Step Paint Correction',quote:true,minsLabel:'Timing confirmed with estimate',desc:'Our premium ceramic option. Includes a more intensive 2-step paint correction followed by a 5-year ceramic coating. Vehicle condition determines the final estimate and timing.'},
   {id:'carpet',cat:'interior',name:'Carpet Shampoo & Heated Extraction',price:80,mins:60,desc:'Deep-cleans carpets with shampoo and heated extraction to lift dirt, odors, and embedded grime.'},
   {id:'fabricseat',cat:'interior',name:'Fabric Seat Shampoo & Heated Extraction',perUnit:12,minsPerUnit:15,unit:'seat',desc:'Deep-cleans fabric seats with shampoo and heated extraction to lift dirt, odors, and embedded grime.'},
   {id:'leatherseat',cat:'interior',name:'Leather Seat Cleaning & Conditioning',perUnit:12,minsPerUnit:10,unit:'seat',desc:'Gently removes dirt, body oils, and buildup, then conditions leather to help protect against drying and cracking.'},
@@ -251,7 +256,8 @@ function relevantAddons(){
   if(state.serviceType==='exterior')cats=['exterior','quote'];
   if(state.serviceType==='both')cats=['interior','exterior','quote'];
   return addons.filter(a=>cats.includes(a.cat)).filter(a=>{
-    if((state.pkg==='full-exterior'||state.pkg==='full-bundle')&&['sealant','wheelwell'].includes(a.id))return false;
+    const includesFullExterior=['full-exterior','full-exterior-mini-interior','full-bundle'].includes(state.pkg);
+    if(includesFullExterior&&['sealant','wheelwell'].includes(a.id))return false;
     return true;
   })
 }
@@ -375,6 +381,8 @@ function saveCustomer(){
     address:address.value.trim(),city:city.value.trim(),year:year.value.trim(),model:model.value.trim(),
     color:color.value.trim(),contact:contact.value,notes:notes.value.trim()
   };
+  state.followUpConsent=!!document.getElementById('followUpConsent')?.checked;
+  saveBookingState();
   return true
 }
 function renderReview(){
@@ -428,7 +436,7 @@ document.getElementById('submitTest').onclick=()=>{
   document.getElementById('success').classList.remove('hidden');
 };
 document.getElementById('startOver').onclick=()=>{
-  Object.assign(state,{step:1,maxStep:1,vehicle:null,serviceType:null,pkg:null,addons:{},date:null,time:null,customer:{}});
+  Object.assign(state,{step:1,maxStep:1,vehicle:null,serviceType:null,pkg:null,addons:{},date:null,time:null,customer:{},followUpConsent:false});
   document.querySelectorAll('input,textarea').forEach(el=>el.value='');
   document.getElementById('contact').selectedIndex=0;
   document.getElementById('vehicleNext').disabled=true;
@@ -443,7 +451,9 @@ document.getElementById('startOver').onclick=()=>{
 renderVehicles();renderProgress();updateSummary();
 
 /* Beastman booking reliability, persistence, and inspection acknowledgement */
-const BEASTMAN_BOOKING_STORAGE_KEY = 'beastmanBookingStateV2';
+const BEASTMAN_BOOKING_STORAGE_KEY = 'beastmanBookingStateV3';
+const BEASTMAN_BOOKING_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+const CUSTOMER_FIELD_IDS = ['first','last','phone','email','address','city','year','model','color','contact','notes'];
 
 function syncNavigationButtons(){
   const vehicleNext = document.getElementById('vehicleNext');
@@ -459,7 +469,19 @@ function syncNavigationButtons(){
 
 function saveBookingState(){
   try{
-    localStorage.setItem(BEASTMAN_BOOKING_STORAGE_KEY, JSON.stringify(state));
+    const customerDraft={...state.customer};
+    CUSTOMER_FIELD_IDS.forEach(id=>{
+      const field=document.getElementById(id);
+      if(field)customerDraft[id]=field.value.trim();
+    });
+    const followUpConsent=!!document.getElementById('followUpConsent')?.checked;
+    localStorage.setItem(BEASTMAN_BOOKING_STORAGE_KEY, JSON.stringify({
+      ...state,
+      customer:customerDraft,
+      followUpConsent,
+      savedAt:Date.now(),
+      followUpEligible:followUpConsent && !!customerDraft.email && !!customerDraft.phone
+    }));
   }catch(e){}
 }
 
@@ -468,8 +490,10 @@ function restoreBookingState(){
     const raw = localStorage.getItem(BEASTMAN_BOOKING_STORAGE_KEY);
     if(!raw) return;
     const saved = JSON.parse(raw);
-    if(saved && typeof saved === 'object'){
+    if(saved && typeof saved === 'object' && Date.now()-(saved.savedAt||0)<=BEASTMAN_BOOKING_TTL_MS){
       Object.assign(state, saved);
+    }else{
+      clearBookingState();
     }
   }catch(e){}
 }
@@ -521,17 +545,28 @@ window.addEventListener('beforeunload', saveBookingState);
 
 document.addEventListener('DOMContentLoaded', ()=>{
   restoreBookingState();
-  state.step=1;
-  state.maxStep=1;
+  state.step=Math.min(7,Math.max(1,Number(state.step)||1));
+  state.maxStep=Math.min(7,Math.max(state.step,Number(state.maxStep)||1));
 
   try{
     renderVehicles();
     if(state.serviceType) renderServiceTypes();
     if(state.pkg) renderPackages();
-    if(typeof renderProgress === 'function') renderProgress();
-    if(typeof updateSummary === 'function') updateSummary();
+    if(state.step>=4)renderAddons();
+    if(state.step>=5){renderScheduleLead();renderCalendar();renderTimes()}
   }catch(e){}
 
+  CUSTOMER_FIELD_IDS.forEach(id=>{
+    const field=document.getElementById(id);
+    if(field && state.customer?.[id])field.value=state.customer[id];
+  });
+  const followUpConsent=document.getElementById('followUpConsent');
+  if(followUpConsent)followUpConsent.checked=!!state.followUpConsent;
+
+  if(state.step===7){
+    try{renderReview()}catch(e){state.step=6}
+  }
+  go(state.step);
   syncNavigationButtons();
 
   const ack = document.getElementById('inspectionAck');

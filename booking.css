@@ -263,6 +263,12 @@ hr.sep{border:0;border-top:1px solid var(--line);margin:20px 0}
   border-radius:18px;
   background:linear-gradient(135deg,rgba(17,168,255,.10),rgba(17,168,255,.025));
 }
+.follow-up-consent{
+  margin-top:16px;padding:17px 18px;border:1px solid var(--line);border-radius:18px;background:#091520;
+}
+.privacy-note{
+  margin:12px 0 0 32px!important;font-size:12px;line-height:1.5;color:var(--muted);
+}
 .inspection-check{
   display:flex;
   gap:12px;
