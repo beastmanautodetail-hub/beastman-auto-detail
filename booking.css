@@ -156,9 +156,13 @@ hr.sep{border:0;border-top:1px solid var(--line);margin:20px 0}
 .progress-step{
   appearance:none;border:0;background:transparent;color:#7e8c99;
   display:flex;align-items:center;justify-content:center;gap:7px;
-  min-width:0;padding:7px 6px;border-radius:999px;font:inherit;cursor:pointer;
+  min-width:0;padding:7px 6px;border-radius:999px;font:inherit;cursor:not-allowed;
   transition:.22s ease;
 }
+.progress-step.reachable{cursor:pointer}
+.progress-step.reachable:hover{color:#dff4ff;background:rgba(17,168,255,.07)}
+.progress-step.reachable:focus-visible{outline:2px solid #73ceff;outline-offset:2px}
+.progress-step:disabled{opacity:.6}
 .progress-step span{
   width:23px;height:23px;border-radius:50%;display:inline-grid;place-items:center;
   border:1px solid #41505e;font-size:11px;font-weight:900;flex:0 0 auto;

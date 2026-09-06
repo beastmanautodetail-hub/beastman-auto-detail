@@ -1,5 +1,5 @@
 const state={
-  step:1,vehicle:null,serviceType:null,pkg:null,addons:{},date:null,time:null,customer:{}
+  step:1,maxStep:1,vehicle:null,serviceType:null,pkg:null,addons:{},date:null,time:null,customer:{}
 };
 
 const vehicles={
@@ -109,14 +109,20 @@ function renderProgress(){
   for(let i=1;i<=7;i++){const s=document.createElement('span');if(i<=state.step)s.className='on';p.appendChild(s)}
   document.querySelectorAll('.progress-step').forEach((el,index)=>{
     const step=index+1;
+    const reached=step<=(state.maxStep||1);
     el.classList.toggle('active',step===state.step);
     el.classList.toggle('done',step<state.step);
-    if(step===state.step) el.setAttribute('aria-current','step');
-    else el.removeAttribute('aria-current');
+    el.classList.toggle('reachable',reached);
+    el.disabled=!reached;
+    if(step===state.step){
+      el.setAttribute('aria-current','step');
+      requestAnimationFrame(()=>el.scrollIntoView({block:'nearest',inline:'nearest'}));
+    }else el.removeAttribute('aria-current');
   });
 }
 function go(step){
   state.step=step;
+  state.maxStep=Math.max(state.maxStep||1,step);
   document.querySelectorAll('.step').forEach(el=>el.classList.toggle('active',Number(el.dataset.step)===step));
   renderProgress();
   updateSummary();
@@ -135,6 +141,7 @@ function renderVehicles(){
     c.innerHTML=`<div class="icon">${v.icon}</div><h2>${v.name}</h2><p>${v.desc}</p>`;
     c.onclick=()=>{
       state.vehicle=id;
+      state.maxStep=2;
       state.serviceType=null;
       state.pkg=null;
       state.addons={};
@@ -176,6 +183,7 @@ function renderServiceTypes(){
     c.innerHTML=`<h2>${o.name}</h2><p>${o.desc}</p>`;
     c.onclick=()=>{
       state.serviceType=o.id;
+      state.maxStep=3;
       state.pkg=null;
       state.addons={};
       document.getElementById('typeNext').disabled=false;
@@ -221,6 +229,7 @@ function renderPackages(){
     c.dataset.package=p.id||p.name;
     c.onclick=()=>{
       state.pkg=p.id;
+      state.maxStep=4;
       state.addons={};
       document.getElementById('packageNext').disabled=false;
       renderPackages();
@@ -332,7 +341,7 @@ function renderCalendar(){
     btn.textContent=d;
     // demo: all dates from Sep 3 onward available
     if(d<3){btn.classList.add('disabled');btn.disabled=true}
-    btn.onclick=()=>{state.date=d;state.time=null;renderCalendar();renderTimes();document.getElementById('scheduleNext').disabled=true;updateSummary()};
+    btn.onclick=()=>{state.date=d;state.time=null;state.maxStep=5;renderCalendar();renderTimes();document.getElementById('scheduleNext').disabled=true;renderProgress();updateSummary()};
     g.appendChild(btn)
   }
   [1,2,3].forEach(x=>{const d=document.createElement('div');d.className='day disabled';d.textContent=x;g.appendChild(d)})
@@ -400,6 +409,18 @@ document.getElementById('addonNext').onclick=()=>{renderScheduleLead();renderCal
 document.getElementById('scheduleNext').onclick=()=>go(6);
 document.getElementById('customerNext').onclick=()=>{if(saveCustomer()){renderReview();go(7)}};
 document.querySelectorAll('[data-back]').forEach(btn=>btn.onclick=()=>go(Math.max(1,state.step-1)));
+document.querySelectorAll('.progress-step').forEach((btn,index)=>{
+  btn.onclick=()=>{
+    const step=index+1;
+    if(step>state.maxStep||step===state.step)return;
+    if(step===2)renderServiceTypes();
+    if(step===3)renderPackages();
+    if(step===4)renderAddons();
+    if(step===5){renderScheduleLead();renderCalendar();renderTimes()}
+    if(step===7){if(!saveCustomer())return;renderReview()}
+    go(step);
+  };
+});
 document.getElementById('submitTest').onclick=()=>{
   const ack=document.getElementById('inspectionAck');
   if(!ack || !ack.checked) return;
@@ -407,7 +428,7 @@ document.getElementById('submitTest').onclick=()=>{
   document.getElementById('success').classList.remove('hidden');
 };
 document.getElementById('startOver').onclick=()=>{
-  Object.assign(state,{step:1,vehicle:null,serviceType:null,pkg:null,addons:{},date:null,time:null,customer:{}});
+  Object.assign(state,{step:1,maxStep:1,vehicle:null,serviceType:null,pkg:null,addons:{},date:null,time:null,customer:{}});
   document.querySelectorAll('input,textarea').forEach(el=>el.value='');
   document.getElementById('contact').selectedIndex=0;
   document.getElementById('vehicleNext').disabled=true;
@@ -500,6 +521,8 @@ window.addEventListener('beforeunload', saveBookingState);
 
 document.addEventListener('DOMContentLoaded', ()=>{
   restoreBookingState();
+  state.step=1;
+  state.maxStep=1;
 
   try{
     renderVehicles();
