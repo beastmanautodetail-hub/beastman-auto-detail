@@ -1,5 +1,5 @@
 const state={
-  step:1,maxStep:1,vehicle:null,serviceType:null,pkg:null,addons:{},date:null,time:null,customer:{},followUpConsent:false
+  step:1,maxStep:1,vehicle:null,serviceType:null,pkg:null,addons:{},date:null,time:null,customer:{}
 };
 
 const vehicles={
@@ -381,7 +381,6 @@ function saveCustomer(){
     address:address.value.trim(),city:city.value.trim(),year:year.value.trim(),model:model.value.trim(),
     color:color.value.trim(),contact:contact.value,notes:notes.value.trim()
   };
-  state.followUpConsent=!!document.getElementById('followUpConsent')?.checked;
   saveBookingState();
   return true
 }
@@ -436,7 +435,7 @@ document.getElementById('submitTest').onclick=()=>{
   document.getElementById('success').classList.remove('hidden');
 };
 document.getElementById('startOver').onclick=()=>{
-  Object.assign(state,{step:1,maxStep:1,vehicle:null,serviceType:null,pkg:null,addons:{},date:null,time:null,customer:{},followUpConsent:false});
+  Object.assign(state,{step:1,maxStep:1,vehicle:null,serviceType:null,pkg:null,addons:{},date:null,time:null,customer:{}});
   document.querySelectorAll('input,textarea').forEach(el=>el.value='');
   document.getElementById('contact').selectedIndex=0;
   document.getElementById('vehicleNext').disabled=true;
@@ -474,13 +473,10 @@ function saveBookingState(){
       const field=document.getElementById(id);
       if(field)customerDraft[id]=field.value.trim();
     });
-    const followUpConsent=!!document.getElementById('followUpConsent')?.checked;
     localStorage.setItem(BEASTMAN_BOOKING_STORAGE_KEY, JSON.stringify({
       ...state,
       customer:customerDraft,
-      followUpConsent,
-      savedAt:Date.now(),
-      followUpEligible:followUpConsent && !!customerDraft.email && !!customerDraft.phone
+      savedAt:Date.now()
     }));
   }catch(e){}
 }
@@ -491,6 +487,9 @@ function restoreBookingState(){
     if(!raw) return;
     const saved = JSON.parse(raw);
     if(saved && typeof saved === 'object' && Date.now()-(saved.savedAt||0)<=BEASTMAN_BOOKING_TTL_MS){
+      delete saved.followUpConsent;
+      delete saved.followUpEligible;
+      localStorage.setItem(BEASTMAN_BOOKING_STORAGE_KEY,JSON.stringify(saved));
       Object.assign(state, saved);
     }else{
       clearBookingState();
@@ -560,9 +559,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const field=document.getElementById(id);
     if(field && state.customer?.[id])field.value=state.customer[id];
   });
-  const followUpConsent=document.getElementById('followUpConsent');
-  if(followUpConsent)followUpConsent.checked=!!state.followUpConsent;
-
   if(state.step===7){
     try{renderReview()}catch(e){state.step=6}
   }
