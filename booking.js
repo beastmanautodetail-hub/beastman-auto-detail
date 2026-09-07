@@ -54,7 +54,7 @@ const addons=[
   {id:'engine',cat:'exterior',name:'Engine Bay Detail',price:40,mins:30,desc:'Safely removes built-up dust, dirt, grease, and grime from under the hood, then conditions plastic and rubber components for a fresh, detailed finish.'},
   {id:'wheelwell',cat:'exterior',name:'Wheel Well Cleaning',price:40,mins:30,desc:'Removes built-up mud, road grime, salt, and debris from wheel wells for a cleaner, more finished appearance.'},
   {id:'enhance',cat:'exterior',name:'Paint Enhancement',vehiclePrice:{standard:190,large:285},vehicleMins:{standard:150,large:210},desc:'A light polishing service designed to improve gloss and overall appearance. Helps reduce the look of minor swirl marks, light scratches, and dullness.'},
-  {id:'correction',cat:'quote',name:'Paint Correction',quote:true,minsLabel:'Approx. 8–10 hours',desc:'Machine polishing used to remove or significantly reduce deeper swirl marks, scratches, oxidation, and other paint imperfections. Final price depends on paint condition.'},
+  {id:'correction',cat:'quote',name:'Paint Correction',quote:true,desc:'Machine polishing used to remove or significantly reduce deeper swirl marks, scratches, oxidation, and other paint imperfections. Pricing and service time are determined after inspecting the vehicle’s paint condition.'},
   {id:'ceramic-3-year',cat:'quote',name:'3-Year Ceramic Coating + Paint Enhancement',quote:true,minsLabel:'Timing confirmed with estimate',desc:'Our more affordable ceramic option. Includes a paint enhancement followed by a 3-year ceramic coating. Vehicle condition determines the final estimate and timing.'},
   {id:'ceramic-5-year',cat:'quote',name:'5-Year Ceramic Coating + 2-Step Paint Correction',quote:true,minsLabel:'Timing confirmed with estimate',desc:'Our premium ceramic option. Includes a more intensive 2-step paint correction followed by a 5-year ceramic coating. Vehicle condition determines the final estimate and timing.'},
   {id:'carpet',cat:'interior',name:'Carpet Shampoo & Heated Extraction',price:80,mins:60,desc:'Deep-cleans carpets with shampoo and heated extraction to lift dirt, odors, and embedded grime.'},
@@ -266,10 +266,11 @@ function renderAddonCard(a){
   const selected=!!val;
   const priceLabel=a.quote?'Request estimate':a.vehiclePrice?money(a.vehiclePrice[vehicleTier()]):a.perUnit?`${money(a.perUnit)} / ${a.unit}`:money(a.price);
   const timeLabel=a.quote?a.minsLabel:a.vehicleMins?timeText(a.vehicleMins[vehicleTier()]):a.minsPerUnit?`${a.minsPerUnit} min / ${a.unit}`:timeText(a.mins);
+  const timePill=timeLabel?`<span class="pill">${timeLabel}</span>`:'';
 
   const c=document.createElement('div');
   c.className='card addon-card'+(selected?' selected':'');
-  c.innerHTML=`<div class="addon-top"><div><h3>${a.name}</h3><div class="meta"><span class="pill blue">${priceLabel}</span><span class="pill">${timeLabel}</span></div><p>${a.desc}</p></div>${a.perUnit?'':`<div class="add-toggle" aria-label="Select add-on"></div>`}</div>${a.perUnit?`<div class="qtyrow"><label style="margin:0">Quantity</label><input type="number" min="0" value="${val||0}" inputmode="numeric"></div>`:''}`;
+  c.innerHTML=`<div class="addon-top"><div><h3>${a.name}</h3><div class="meta"><span class="pill blue">${priceLabel}</span>${timePill}</div><p>${a.desc}</p></div>${a.perUnit?'':`<div class="add-toggle" aria-label="Select add-on"></div>`}</div>${a.perUnit?`<div class="qtyrow"><label style="margin:0">Quantity</label><input type="number" min="0" value="${val||0}" inputmode="numeric"></div>`:''}`;
 
   if(a.perUnit){
     const inp=c.querySelector('input');
