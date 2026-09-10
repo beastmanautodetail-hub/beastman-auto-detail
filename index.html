@@ -62,11 +62,7 @@
 <body>
   <header class="site-header">
     <a class="brand" href="index.html" aria-label="Beastman Auto Detail home">
-      <img class="brand-logo" src="images/beastman-sasquatch.png" alt="Beastman Auto Detail Sasquatch logo">
-      <span class="brand-copy">
-        <strong>BEASTMAN</strong>
-        <small>AUTO DETAIL</small>
-      </span>
+      <span class="wordmark-frame"><img src="images/beastman-wordmark.png" alt="Beastman Auto Detail" width="864" height="864"></span>
     </a>
 
     <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">
@@ -84,8 +80,8 @@
   </header>
 
   <main>
-    <section class="hero">
-      <div class="hero-glow"></div>
+    <section class="hero homepage-photo-hero">
+
       <div class="hero-content">
         <span class="eyebrow">MOBILE DETAILING • PHOENIX EAST VALLEY</span>
         <h1>Luxury finish.<br><span>Beast-level clean.</span></h1>
@@ -99,7 +95,7 @@
         </div>
 
         <div class="hero-proof">
-          <div><strong>81+</strong><span>5-Star Google Reviews</span></div>
+          <div class="hero-review-widget" aria-label="Google review rating"><script defer async src="https://cdn.trustindex.io/loader.js?9db8fde81c1c181828760619f92"></script></div>
           <div><strong>100%</strong><span>Mobile Service</span></div>
           <div><strong>Clear</strong><span>Upfront Pricing</span></div>
         </div>
@@ -107,10 +103,12 @@
 
       <div class="hero-panel">
         <div class="detail-card">
-          <img class="standard-logo" src="images/beastman-sasquatch.png" alt="" aria-hidden="true">
+          <img class="standard-logo" src="images/beastman-mascot.png" alt="Beastman Sasquatch with a pressure washer" width="1024" height="864">
+          <!-- User-supplied Bronco homepage photograph. -->
+          <figure class="work-photo homepage-feature"><img src="images/beastman-bronco.jpeg" alt="Bright purple Ford Bronco with off-road tires and roof rack outside an automotive workshop" width="4032" height="3024" fetchpriority="high"><figcaption>BEASTMAN AUTO DETAIL / VEHICLE GALLERY</figcaption></figure>
           <span class="detail-label">THE BEASTMAN STANDARD</span>
           <h2>More than a wash.</h2>
-          <p>Our mission is simple: do exceptional work, treat people right, and build relationships that last longer than the detail. At Beastman Auto Detail, we take no shortcuts, treat every vehicle like our own, and work to earn something more valuable than a sale—your trust.</p>
+          <p>Our mission is simple: do exceptional work, treat people right, and build relationships that last longer than the detail. At Beastman Auto Detail, we take no shortcuts, treat every vehicle like our own, and work to earn something more valuable than a sale-your trust.</p>
           <ul>
             <li>Professional tools & products</li>
             <li>Interior + exterior packages</li>
@@ -139,7 +137,7 @@
           <span class="eyebrow">DETAILING BUILT AROUND YOUR VEHICLE</span>
           <h2>Choose the level of clean you need.</h2>
         </div>
-        <p>From a maintenance refresh to a full reset, every service is designed to be easy to understand and easy to book.</p>
+        <p>From a maintenance refresh to a full reset, every service is designed to be easy to understand and easy to book. <a class="text-link" href="services.html">Compare service details →</a></p>
       </div>
 
       <div class="service-grid">
@@ -247,25 +245,11 @@
         <span class="eyebrow">TRUSTED BY LOCAL DRIVERS</span>
         <h2>Built on relationships, not shortcuts.</h2>
         <p>Exceptional service matters just as much as the final shine.</p>
-        <div class="review-score"><strong>5.0</strong><span>★★★★★</span><small>81+ Google reviews</small></div>
       </div>
 
-      <div class="review-grid">
-        <blockquote>
-          <div class="stars">★★★★★</div>
-          <p>“Professional, thorough, and the vehicle looked incredible when it was finished.”</p>
-          <cite>Google Customer</cite>
-        </blockquote>
-        <blockquote>
-          <div class="stars">★★★★★</div>
-          <p>“The attention to detail and customer service are exactly why we’ll keep coming back.”</p>
-          <cite>Google Customer</cite>
-        </blockquote>
-        <blockquote>
-          <div class="stars">★★★★★</div>
-          <p>“Easy to book, honest pricing, and a night-and-day difference in the car.”</p>
-          <cite>Google Customer</cite>
-        </blockquote>
+      <div class="google-reviews-widget" aria-label="Google customer reviews">
+        <script defer async src="https://cdn.trustindex.io/loader.js?2ecae4781f3a182e2916bf6f2c8"></script>
+        <noscript><p>Enable JavaScript to view our Google reviews.</p></noscript>
       </div>
     </section>
 
@@ -279,13 +263,15 @@
           time to do the job right, and stand behind our work when we fall short.
         </p>
         <p>
-          We’re not here just to detail your vehicle—we’re here to earn your trust, protect your investment,
+          We’re not here just to detail your vehicle-we’re here to earn your trust, protect your investment,
           and become the friend you call when you want it done right.
         </p>
         <a class="text-link" href="booking.html">Experience the Beastman standard →</a>
       </div>
 
       <div class="about-points">
+        <!-- Owner interior-work portrait placement. See PHOTO-ASSETS.md. -->
+        <figure class="work-photo about-work"><img src="images/full-interior-after.jpeg" alt="Clean floor mat and footwell after Beastman interior detailing" loading="lazy" width="900" height="1000"><figcaption>REAL BEASTMAN WORK / INTERIOR DETAIL</figcaption></figure>
         <div>
           <span>01</span>
           <h3>Honest work</h3>
@@ -360,7 +346,7 @@
 
   <footer>
     <div class="footer-brand">
-      <img class="footer-logo" src="images/beastman-full-logo.jpeg" alt="Beastman Auto Detail logo and phone number 602-550-1949">
+      <img class="footer-logo" src="images/beastman-logo-phone.png" alt="Beastman Auto Detail logo and phone number 602-550-1949">
       <span>Taming Dirt and Grime, One Detail at a Time.</span>
     </div>
     <div class="footer-links">

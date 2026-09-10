@@ -1,6 +1,6 @@
 :root{
-  --bg:#07111b;--panel:#0d1b29;--panel2:#122334;--text:#f7fafc;--muted:#a9b7c3;
-  --blue:#18a8ff;--blue2:#0a8bd6;--line:#2b4358;--good:#6bd89c;--warn:#ffd166;--danger:#ff7676;
+  --bg:#141513;--panel:#20221f;--panel2:#2a2c28;--text:#f7fafc;--muted:#b8bbb2;
+  --blue:#dbad62;--blue2:#c3944a;--line:#494c44;--good:#6bd89c;--warn:#ffd166;--danger:#ff7676;
   --shadow:0 18px 50px rgba(0,0,0,.28);--radius:20px;
 }
 *{box-sizing:border-box}
@@ -291,3 +291,34 @@ button.disabled-by-ack{
   cursor:not-allowed;
   filter:saturate(.6);
 }
+
+/* Workshop visual treatment; booking state and controls remain unchanged. */
+:root{--radius:2px;--shadow:none}
+body{background:#141513 repeating-linear-gradient(112deg,transparent 0 4px,rgba(255,255,255,.018) 4px 5px);font-family:Arial,Helvetica,sans-serif}
+h1,h2,h3{font-family:Impact,'Arial Narrow','Helvetica Neue',sans-serif;letter-spacing:.015em;line-height:1.12}h1{text-transform:uppercase}
+header,.summary,.progress-wrap{background:#141513;backdrop-filter:none}
+.booking-logo{display:block;width:260px;max-width:70vw;height:auto}.booking-brand-name{display:none}.brand small{font-size:10px;margin-top:8px}
+.card,.calendar{background:#20221f;box-shadow:none;border-radius:2px}
+.choice:hover{transform:none;border-color:var(--blue)}.choice.selected{border:2px solid var(--blue);box-shadow:inset 4px 0 var(--blue);background:#292c24}
+.card.selected{animation:none}
+.btn,.pill,.note,.add-toggle,input,select,textarea,.day,.time-slot,.totalbox,.callout,.progress-step,.completed-summary,.edit-step,.review-ready-banner,.inspection-ack{border-radius:2px}
+.btn.secondary,.note,.add-toggle,input,select,textarea,.day,.time-slot{background:#191b17;border-color:#62665b}
+.day.selected,.time-slot.selected{background:var(--blue);color:#181911}
+.btn.primary{color:#181911}.pill{border-color:#62665b}.pill.blue{color:var(--blue);border-color:var(--blue);background:#292c24}
+.completed-summary,.review-ready-banner,.inspection-ack,.totalbox,.callout{background:#292c24;border-color:#666c5c;color:var(--text)}
+.progress-step.active,.progress-step.reachable:hover{background:#292c24;color:var(--text)}
+.progress-step.active span,.summary-check,.review-ready-check{background:var(--blue);box-shadow:none;color:#181911;border-color:var(--blue);border-radius:2px}
+.progress-step.done,.edit-step{color:var(--blue-soft)}.progress-step.done span{background:#292c24;border-color:var(--blue);color:var(--blue)}
+.progress span.on{box-shadow:none}.progress-step b{font-size:12px}.progress-step span{border-radius:2px}
+.edit-step{background:#20221f;border-color:#666c5c}.inspection-check input{accent-color:var(--blue)}
+.reviewrow{border-color:var(--line)}.list{color:#d7d9d1}
+button:focus-visible,.choice:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--blue);outline-offset:3px;box-shadow:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* Original transparent PNG artwork; frame removes only transparent wordmark padding. */
+.wordmark-frame{position:relative;display:block;width:260px;max-width:65vw;aspect-ratio:826/232;overflow:hidden;background:transparent}
+.wordmark-frame img{position:absolute;width:104.6005%;max-width:none;height:auto;left:-1.0896%;top:-92.2414%;background:transparent;border:0;border-radius:0;padding:0}
+@media(max-width:580px){.wordmark-frame{width:220px}}
+
+/* Service help links have their own target and never select the surrounding card. */
+.service-help{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-top:12px;padding:4px 2px;color:var(--blue-soft);font-size:14px;text-decoration:none}.service-help>span:first-child{display:inline-grid;place-items:center;width:24px;height:24px;border:1px solid currentColor;border-radius:50%;font-weight:900}.service-help:hover{text-decoration:underline}.service-help:focus-visible{outline:3px solid var(--blue);outline-offset:4px}

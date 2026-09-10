@@ -32,23 +32,25 @@ const packages={
   },
   large:{
     interior:[
-      {id:'mini-interior',name:'Mini Interior Detail',price:95,mins:60,desc:'A light interior reset for trucks and three-row SUVs.',items:['Light vacuum including cracks and crevices','Interior window cleaning','All hard surfaces wiped down','Light seat cleaning / leather upholstery','Light door-jamb wipe down']},
+      {id:'mini-interior',name:'Mini Interior Detail',price:105,mins:60,desc:'A light interior reset for trucks and three-row SUVs.',items:['Light vacuum including cracks and crevices','Interior window cleaning','All hard surfaces wiped down','Light seat cleaning / leather upholstery','Light door-jamb wipe down']},
       {id:'full-interior',name:'Full Interior Detail',price:275,mins:180,desc:'A comprehensive interior detail with added time for larger cabins and third-row seating.',items:['Full vacuum including cracks and crevices','Steam cleaning all vents and hard surfaces','All hard surfaces scrubbed and cleaned','Seat cleaning / leather upholstery','Floor mat removal and cleaning','All crevices cleaned and blown out with air','Door-jamb cleaning','Interior window cleaning']}
     ],
     exterior:[
-      {id:'mini-exterior',name:'Mini Exterior Detail',price:95,mins:60,desc:'A light exterior refresh for trucks and three-row SUVs.',items:['Wheel and tire cleaning / tire shine','Bug removal','Snow foam hand wash','Exterior window cleaning']},
+      {id:'mini-exterior',name:'Mini Exterior Detail',price:105,mins:60,desc:'A light exterior refresh for trucks and three-row SUVs.',items:['Wheel and tire cleaning / tire shine','Bug removal','Snow foam hand wash','Exterior window cleaning']},
       {id:'full-exterior',name:'Full Exterior Detail',price:175,mins:120,desc:'A deeper exterior clean with added paint and trim protection.',items:['Wheel and tire cleaning / dressing','Wheel well cleaning / dressing','Bug and tar removal','Snow foam hand wash','Exterior window cleaning','3-month paint protection sealant','Exterior plastics dressed with UV protection']}
     ],
     both:[
-      {id:'mini-bundle',name:'Mini Interior + Exterior',price:160,mins:120,desc:'Complete light interior and exterior refresh in one appointment.',items:['MINI EXTERIOR: wheel/tire cleaning + tire shine, bug removal, snow foam hand wash, exterior windows','MINI INTERIOR: light vacuum, interior windows, hard-surface wipe-down, light seat/leather cleaning, light door-jamb wipe-down','$30 bundle savings']},
-      {id:'mini-exterior-full-interior',name:'Mini Exterior + Full Interior',price:330,mins:240,desc:'Pair a light exterior refresh with a comprehensive interior detail for a larger cabin.',items:['MINI EXTERIOR: wheel/tire cleaning + tire shine, bug removal, snow foam hand wash, exterior windows','FULL INTERIOR: full vacuum, steam cleaning, scrubbed hard surfaces, seat/leather cleaning, floor mats, crevices, door jambs, interior windows','$40 bundle savings']},
-      {id:'full-exterior-mini-interior',name:'Full Exterior + Mini Interior',price:230,mins:180,desc:'Pair a deeper protected exterior detail with a light interior reset.',items:['FULL EXTERIOR: wheel/tire cleaning + dressing, wheel wells, bug/tar removal, snow foam hand wash, exterior windows, 3-month sealant, UV dressing','MINI INTERIOR: light vacuum, interior windows, hard-surface wipe-down, light seat/leather cleaning, light door-jamb wipe-down','$40 bundle savings']},
+      {id:'mini-bundle',name:'Mini Interior + Exterior',price:180,mins:120,desc:'Complete light interior and exterior refresh in one appointment.',items:['MINI EXTERIOR: wheel/tire cleaning + tire shine, bug removal, snow foam hand wash, exterior windows','MINI INTERIOR: light vacuum, interior windows, hard-surface wipe-down, light seat/leather cleaning, light door-jamb wipe-down','$30 bundle savings']},
+      {id:'mini-exterior-full-interior',name:'Mini Exterior + Full Interior',price:340,mins:240,desc:'Pair a light exterior refresh with a comprehensive interior detail for a larger cabin.',items:['MINI EXTERIOR: wheel/tire cleaning + tire shine, bug removal, snow foam hand wash, exterior windows','FULL INTERIOR: full vacuum, steam cleaning, scrubbed hard surfaces, seat/leather cleaning, floor mats, crevices, door jambs, interior windows','$40 bundle savings']},
+      {id:'full-exterior-mini-interior',name:'Full Exterior + Mini Interior',price:240,mins:180,desc:'Pair a deeper protected exterior detail with a light interior reset.',items:['FULL EXTERIOR: wheel/tire cleaning + dressing, wheel wells, bug/tar removal, snow foam hand wash, exterior windows, 3-month sealant, UV dressing','MINI INTERIOR: light vacuum, interior windows, hard-surface wipe-down, light seat/leather cleaning, light door-jamb wipe-down','$40 bundle savings']},
       {id:'full-bundle',name:'Full Interior + Exterior',price:400,mins:300,desc:'Complete interior and exterior detail for a truck or three-row SUV.',items:['FULL EXTERIOR: wheel/tire cleaning + dressing, wheel wells, bug/tar removal, snow foam hand wash, exterior windows, 3-month sealant, UV dressing','FULL INTERIOR: full vacuum, steam cleaning, scrubbed hard surfaces, seat/leather cleaning, floor mats, crevices, door jambs, interior windows','$50 bundle savings']}
     ]
   }
 };
 
 const addons=[
+  {id:'water-spots-paint',cat:'exterior',name:'Water Spot Removal - Paint',price:150,mins:60,desc:'Targets water spots and mineral deposits on painted exterior surfaces.'},
+  {id:'water-spots-windows',cat:'exterior',name:'Water Spot Removal - Windows',price:150,mins:60,desc:'Targets water spots and mineral deposits on exterior window glass.'},
   {id:'sealant',cat:'exterior',name:'Paint Protection Sealant',price:20,mins:30,desc:'Similar to traditional waxes, this durable coating boosts shine and helps guard against UV rays, dirt, road grime, and water spots for up to three months with proper care.'},
   {id:'clay',cat:'exterior',name:'Clay Bar Treatment',price:40,mins:30,desc:'Removes embedded contaminants regular washing cannot, such as industrial fallout, tree sap, brake dust, and overspray. Leaves paint smoother and better prepared for protection.'},
   {id:'engine',cat:'exterior',name:'Engine Bay Detail',price:40,mins:30,desc:'Safely removes built-up dust, dirt, grease, and grime from under the hood, then conditions plastic and rubber components for a fresh, detailed finish.'},
@@ -71,7 +73,7 @@ const addons=[
 function money(n){return '$'+Math.round(n||0)}
 function vehicleTier(){return vehicles[state.vehicle]?.tier||state.vehicle}
 function timeText(m){
-  if(!m)return '—';
+  if(!m)return '-';
   const h=Math.floor(m/60),r=Math.round(m%60);
   return h?(r?`${h} hr ${r} min`:`${h} hr`):`${r} min`
 }
@@ -224,6 +226,15 @@ function specialPackages(){
   }
   return [];
 }
+function serviceHelpLink(id,name){
+  const slug=(id==='boat-special'||id==='rv-special')?vehicleTier()+'-'+state.serviceType:id;
+  return `<a class="service-help" href="service-${slug}.html" aria-label="Learn about ${name}"><span aria-hidden="true">?</span><span>Questions about Service?</span></a>`;
+}
+function wireServiceHelp(card){
+  const link=card.querySelector('.service-help');
+  if(link)link.addEventListener('click',event=>{event.stopPropagation();saveBookingState();});
+}
+
 function renderPackages(){
   const g=document.getElementById('packageGrid');g.innerHTML='';
   document.getElementById('packageLead').textContent=`Showing ${state.serviceType} options for ${vehicles[state.vehicle].name}.`;
@@ -231,6 +242,8 @@ function renderPackages(){
   arr.forEach(p=>{
     const c=document.createElement('div');c.className='card choice'+(state.pkg===p.id?' selected':'');
     c.innerHTML=`<h2>${p.name}</h2><div class="meta">${p.price?`<span class="pill blue">${money(p.price)}</span>`:'<span class="pill blue">Calculated by size</span>'}${p.mins?`<span class="pill">${timeText(p.mins)}</span>`:'<span class="pill">Time based on size</span>'}</div><p>${p.desc}</p><ul class="list">${(p.items||[]).map(i=>`<li>${i}</li>`).join('')}</ul>${p.note?`<div class="note">${p.note}</div>`:''}${p.special?`<div class="note">${p.special}</div>`:''}`;
+    c.innerHTML+=serviceHelpLink(p.id,p.name);
+    wireServiceHelp(c);
     c.dataset.package=p.id||p.name;
     c.onclick=()=>{
       state.pkg=p.id;
@@ -272,6 +285,8 @@ function renderAddonCard(a){
   c.className='card addon-card'+(selected?' selected':'');
   c.innerHTML=`<div class="addon-top"><div><h3>${a.name}</h3><div class="meta"><span class="pill blue">${priceLabel}</span>${timePill}</div><p>${a.desc}</p></div>${a.perUnit?'':`<div class="add-toggle" aria-label="Select add-on"></div>`}</div>${a.perUnit?`<div class="qtyrow"><label style="margin:0">Quantity</label><input type="number" min="0" value="${val||0}" inputmode="numeric"></div>`:''}`;
 
+  c.innerHTML+=serviceHelpLink(a.id,a.name);
+  wireServiceHelp(c);
   if(a.perUnit){
     const inp=c.querySelector('input');
     inp.oninput=()=>{
@@ -357,7 +372,7 @@ function renderTimes(){
   const sec=document.getElementById('timeSection'),g=document.getElementById('timeGrid');
   if(!state.date){sec.classList.add('hidden');return}
   sec.classList.remove('hidden');
-  document.getElementById('selectedDateLabel').textContent=`Available times — September ${state.date}, 2026`;
+  document.getElementById('selectedDateLabel').textContent=`Available times - September ${state.date}, 2026`;
   g.innerHTML='';
   const t=totals();
   const base=['8:00 AM','11:30 AM','2:30 PM'];
@@ -408,7 +423,7 @@ function renderReview(){
     <div class="reviewrow"><span>Phone</span><strong>${state.customer.phone}</strong></div>
     <div class="reviewrow"><span>Email</span><strong>${state.customer.email}</strong></div>
     <div class="reviewrow"><span>Service location</span><strong>${state.customer.address}, ${state.customer.city}</strong></div>
-    <div class="reviewrow"><span>Vehicle</span><strong>${[state.customer.year,state.customer.model,state.customer.color].filter(Boolean).join(' • ')||'—'}</strong></div>
+    <div class="reviewrow"><span>Vehicle</span><strong>${[state.customer.year,state.customer.model,state.customer.color].filter(Boolean).join(' • ')||'-'}</strong></div>
     <div class="reviewrow"><span>Preferred contact</span><strong>${state.customer.contact}</strong></div>`;
 }
 document.getElementById('vehicleNext').onclick=()=>{renderServiceTypes();go(2)};
@@ -551,8 +566,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   try{
     renderVehicles();
-    if(state.serviceType) renderServiceTypes();
-    if(state.pkg) renderPackages();
+    if(state.vehicle) renderServiceTypes();
+    if(state.vehicle && state.serviceType) renderPackages();
     if(state.step>=4)renderAddons();
     if(state.step>=5){renderScheduleLead();renderCalendar();renderTimes()}
   }catch(e){}
