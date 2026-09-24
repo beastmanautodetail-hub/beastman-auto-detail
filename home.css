@@ -1,13 +1,13 @@
 
 :root{
-  --bg:#070b0f;
-  --panel:#0d141b;
-  --panel-2:#111b24;
-  --line:#22313e;
+  --bg:#141513;
+  --panel:#20221f;
+  --panel-2:#2a2c28;
+  --line:#494c44;
   --text:#f7fbff;
-  --muted:#9aa8b5;
-  --blue:#12adff;
-  --blue-soft:#8bddff;
+  --muted:#b8bbb2;
+  --blue:#dbad62;
+  --blue-soft:#edc58b;
   --max:1180px;
 }
 *{box-sizing:border-box}
@@ -16,7 +16,7 @@ body{
   margin:0;
   background:
     radial-gradient(circle at 15% 0%,rgba(18,173,255,.10),transparent 30%),
-    #070b0f;
+    #141513;
   color:var(--text);
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
@@ -273,3 +273,79 @@ footer small{grid-column:1/-1;font-size:10px}
 @media(max-width:580px){
   .footer-logo{width:100%}
 }
+
+/* Beastman workshop theme: solid surfaces, authentic work and sign-like branding. */
+body{background-color:var(--bg);background-image:repeating-linear-gradient(112deg,transparent 0 4px,rgba(255,255,255,.018) 4px 5px);font-family:Arial,Helvetica,sans-serif}
+h1,h2,h3,.hero-proof strong{font-family:Impact,'Arial Narrow','Helvetica Neue',sans-serif;font-weight:900;letter-spacing:.015em!important}
+h1,h2{text-transform:uppercase}
+.site-header{height:90px;background:#141513;backdrop-filter:none;border-bottom:3px solid var(--line)}
+.brand-logo{width:82px;height:68px;border-radius:0;background:transparent}
+.brand-copy strong{font-size:19px}.brand-copy small{font-size:11px}
+.hero{grid-template-columns:1.1fr 1fr;gap:48px;padding-top:65px;padding-bottom:65px;min-height:760px;align-items:start}
+.hero-content{padding-top:34px;min-width:0}.hero h1{font-size:clamp(52px,6.2vw,82px);line-height:1.02;letter-spacing:0!important}
+.hero-lead,.detail-card p,.detail-card li,blockquote p,.about-card .mission{color:#c7c9c1}
+.hero-proof{margin-top:38px}.hero-proof div{border-top:3px solid var(--line)}
+.eyebrow,.detail-label,.service-number,.result-title span,.result-caption span{font-size:12px;line-height:1.5;letter-spacing:.12em}
+.btn,.nav-cta,.floating-book,.pill,.full-tab,.compare-label{border-radius:2px;box-shadow:none}
+.btn-primary,.nav-cta,.floating-book{background:var(--blue);color:#181911!important}
+.btn-secondary{background:#23251f;border-color:#65685d}
+.detail-card{padding:24px;background:#20221f;border:1px solid var(--line);border-top:4px solid var(--blue);border-radius:0;box-shadow:none}
+.detail-card:before{display:none}.detail-card h2{font-size:30px}.detail-card ul{margin:16px 0}
+.standard-logo{position:static;display:block;width:100%;max-width:360px;max-height:none;height:auto;opacity:1;border-radius:0;margin:0 auto 22px}
+.work-photo{margin:0 0 23px;background:#141513;border:1px solid var(--line)}
+.work-photo img{display:block;width:100%;height:245px;object-fit:cover;object-position:center 55%}
+.work-photo figcaption{padding:11px 13px;color:var(--muted);font-size:12px;letter-spacing:.08em;font-weight:700;line-height:1.5}
+.section{padding-top:85px;padding-bottom:85px}.section-heading{border-top:3px solid var(--line);padding-top:26px}
+.service-grid{gap:0;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.service-card{border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0;background:#20221f;padding-bottom:76px}
+.service-card.featured{background:#292b25;border-color:var(--line)}
+.service-number{color:var(--blue);font-size:18px;margin-bottom:22px}
+.pill{background:#dbad62;color:#181911;font-size:11px}
+.clickable-service:hover,.clickable-service.card-selected{transform:none;background:#2e3129;box-shadow:inset 4px 0 var(--blue);border-color:var(--line)}
+.result-card,blockquote,.about-card,.about-points,details,.final-cta,.footer-logo{border-radius:0}
+.result-card{border-bottom:4px solid var(--blue)}
+blockquote{border:0;border-left:3px solid var(--blue);background:#20221f}
+.about-card,.about-points{background:#20221f}.about-points{gap:20px}.about-work{margin:0}.about-work img{height:260px}
+.final-cta{background:#252720;border:1px solid var(--line);border-top:4px solid var(--blue)}
+.trust-strip{color:#b8bbb2;font-size:12px;background:#20221f;gap:28px}
+.full-tabs,.full-tab.active{background:#252720}.full-tab.active{border-color:var(--blue);color:var(--blue-soft)}
+.nav a,.btn,.text-link,.service-card a,.detail-card a{font-size:14px}
+a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--blue-soft);outline-offset:4px}
+.compare:focus-within{outline:3px solid var(--blue-soft);outline-offset:-3px}
+@media(max-width:900px){.site-header{height:80px}.nav{top:80px;background:#20221f;border-radius:0}.hero{grid-template-columns:1fr;gap:32px;padding-top:35px}.hero-content{padding-top:0}.hero-panel{max-width:620px;width:100%;margin:auto}.brand-logo{width:68px;height:58px}}
+@media(max-width:580px){.hero h1{font-size:50px}.hero{padding-bottom:48px}.section{padding-top:56px;padding-bottom:56px}.detail-card{padding:20px}.hero-proof span{font-size:11px}.service-card{padding:26px 26px 76px}.brand-copy strong{font-size:16px}.brand-copy small{font-size:10px}.work-photo img{height:230px}.about-card,.about-points{padding:24px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+
+/* Preserve the complete user-supplied homepage photograph at every viewport. */
+.work-photo.homepage-feature img{height:auto;aspect-ratio:4/3;object-fit:contain}
+
+/* Original transparent PNG artwork; frame removes only transparent wordmark padding. */
+.wordmark-frame{position:relative;display:block;width:260px;max-width:65vw;aspect-ratio:826/232;overflow:hidden;background:transparent}
+.wordmark-frame img{position:absolute;width:104.6005%;max-width:none;height:auto;left:-1.0896%;top:-92.2414%;background:transparent;border:0;border-radius:0;padding:0}
+@media(max-width:580px){.wordmark-frame{width:220px}}
+
+.standard-logo{width:210px;max-width:100%;height:auto;background:transparent;padding:0}
+.footer-logo{background:transparent;padding:0;border-radius:0;width:min(500px,100%)}
+
+/* Give the embedded reviews room for its responsive carousel. */
+.reviews{grid-template-columns:minmax(0,1fr);gap:30px}
+.reviews-intro{max-width:780px}
+.google-reviews-widget{min-width:0;width:100%}
+
+/* Keep the compact rating embed within the hero proof row. */
+.hero-proof>.hero-review-widget{min-width:0}
+.hero-proof .hero-review-widget div{border-top:0;padding-top:0}
+@media(max-width:580px){.hero-proof{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-proof>.hero-review-widget{grid-column:1/-1}}
+
+/* Authentic Corvette backdrop for the opening homepage copy only. */
+.homepage-photo-hero .hero-content{
+  padding:34px 28px;min-height:730px;
+  background:linear-gradient(180deg,rgba(10,12,10,.86) 0%,rgba(10,12,10,.72) 42%,rgba(10,12,10,.40) 70%,rgba(10,12,10,.85) 100%),url("images/beastman-corvettes-closeup.jpeg") center 65%/cover no-repeat;
+  border-bottom:4px solid var(--blue);
+}
+.homepage-photo-hero h1{font-size:clamp(46px,5.5vw,72px)}
+.homepage-photo-hero .hero-lead{color:#f0f1ec}
+.homepage-photo-hero .hero-proof{margin-top:100px}
+.homepage-photo-hero .hero-proof span{color:#e4e6dd}
+@media(max-width:900px){.homepage-photo-hero .hero-content{min-height:700px;background-position:center 65%}}
+@media(max-width:580px){.homepage-photo-hero .hero-content{padding:28px 18px;min-height:700px}.homepage-photo-hero h1{font-size:46px}.homepage-photo-hero .hero-proof{margin-top:65px}}

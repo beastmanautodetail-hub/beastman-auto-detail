@@ -46,3 +46,13 @@
   .city-local>p{font-size:16px}
 }
 @media(prefers-reduced-motion:reduce){.city-page{scroll-behavior:auto}.area-link{transition:none}}
+
+/* Carry the workshop identity through all eight local landing pages. */
+.area-link{border-radius:0;background:#20221f;border-bottom:3px solid var(--line)}
+.city-page .city-hero{align-items:start}.city-page .hero h1{letter-spacing:0;line-height:1.08}
+.city-page .detail-card{padding:24px}.city-page .standard-logo{max-width:340px}
+.city-page .work-photo img{height:220px}.city-local>p{color:#c7c9c1}
+.city-page .service-card{padding-bottom:30px}.city-page .section-heading{padding-top:24px}
+@media(max-width:900px){.city-page .city-hero{grid-template-columns:1fr}.city-page .city-hero>.detail-card{max-width:620px;width:100%;margin:auto}}
+
+.city-page .standard-logo{width:210px;max-width:100%;background:transparent}
